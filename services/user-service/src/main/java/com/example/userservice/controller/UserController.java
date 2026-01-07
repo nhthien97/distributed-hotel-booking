@@ -1,7 +1,9 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.dto.UserCreateRequest;
 import com.example.userservice.entity.User;
 import com.example.userservice.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class UserController {
 
     // POST /users
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@Valid @RequestBody UserCreateRequest request) {
+        return userService.createUser(request);
     }
 
     // GET /users
