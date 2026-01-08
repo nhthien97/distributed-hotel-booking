@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // POST /users
+    // POST /users (Register)
     @PostMapping
     public User createUser(@Valid @RequestBody UserCreateRequest request) {
         return userService.createUser(request);
@@ -28,5 +28,11 @@ public class UserController {
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    // GET /users/by-email?email=...
+    @GetMapping("/by-email")
+    public User getUserByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email);
     }
 }
