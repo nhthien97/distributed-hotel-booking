@@ -3,6 +3,8 @@ package com.example.authservice.service;
 import com.example.authservice.client.UserClient;
 import com.example.authservice.dto.UserResponse;
 import com.example.authservice.security.JwtUtil;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +12,7 @@ public class AuthService {
 
     private final UserClient userClient;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthService(UserClient userClient, JwtUtil jwtUtil) {
         this.userClient = userClient;
@@ -21,7 +24,7 @@ public class AuthService {
         UserResponse user = userClient.getUserByEmail(email);
 
         if (user == null || user.getPassword() == null
-                || !password.equals(user.getPassword())) {
+                || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 

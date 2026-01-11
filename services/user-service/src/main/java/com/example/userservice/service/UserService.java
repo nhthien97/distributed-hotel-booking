@@ -3,6 +3,7 @@ package com.example.userservice.service;
 import com.example.userservice.dto.UserCreateRequest;
 import com.example.userservice.entity.User;
 import com.example.userservice.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,30 +12,38 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Create user (Register)
+    // CREATE USER (REGISTER)
     public User createUser(UserCreateRequest request) {
+
+        String encodedPassword =
+                passwordEncoder.encode(request.getPassword());
+
         User user = new User(
                 request.getUsername(),
                 request.getEmail(),
-                request.getPassword(),
+                encodedPassword,
                 request.getRole()
         );
+
         return userRepository.save(user);
     }
 
-    // Get all users
+    // GET ALL USERS
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Get user by email (for Auth Service)
+    // 🔥 GET USER BY EMAIL (FOR AUTH-SERVICE)
+    // ❗ KHÔNG throw RuntimeException → tránh 500
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByEmail(email).orElse(null);
     }
 }

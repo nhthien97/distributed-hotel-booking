@@ -1,9 +1,11 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.dto.UserAuthResponse;
 import com.example.userservice.dto.UserCreateRequest;
 import com.example.userservice.entity.User;
 import com.example.userservice.service.UserService;
-import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,21 +20,38 @@ public class UserController {
         this.userService = userService;
     }
 
-    // POST /users (Register)
+    // CREATE USER
     @PostMapping
-    public User createUser(@Valid @RequestBody UserCreateRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createUser(@RequestBody UserCreateRequest request) {
         return userService.createUser(request);
     }
 
-    // GET /users
+    // GET ALL USERS
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    // GET /users/by-email?email=...
+    // 🔥 DÙNG RIÊNG CHO AUTH-SERVICE
     @GetMapping("/by-email")
-    public User getUserByEmail(@RequestParam String email) {
-        return userService.getUserByEmail(email);
+    public ResponseEntity<UserAuthResponse> getUserByEmail(
+            @RequestParam String email
+    ) {
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // ✅ 404
+        }
+
+        UserAuthResponse response = new UserAuthResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(), // 🔥 QUAN TRỌNG
+                user.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
