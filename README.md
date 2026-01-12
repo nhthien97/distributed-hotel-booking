@@ -1,11 +1,13 @@
 # distributed-hotel-booking
 Distributed Hotel Booking System - Distributed Applications
-
 cd /workspaces/distributed-hotel-booking
+pwd
+
 # CHẠY USER-SERVICE
 cd services/user-service
-chmod +x mvnw
 ./mvnw clean spring-boot:run
+# TEST USER SERVICE
+curl http://localhost:8081/users
 
 curl -X POST http://localhost:8081/users \
 -H "Content-Type: application/json" \
@@ -16,22 +18,32 @@ curl -X POST http://localhost:8081/users \
   "role": "ADMIN"
 }'
 
-curl -i "http://localhost:8081/users/by-email?email=admin@test.com"
 # CHẠY AUTH-SERVICE
 cd /workspaces/distributed-hotel-booking/services/auth-service
-chmod +x mvnw
 ./mvnw clean spring-boot:run
 
 curl -X POST http://localhost:8080/auth/login \
 -H "Content-Type: application/json" \
--d '{
-  "email": "admin@test.com",
-  "password": "123456"
-}'
+-d '{"email":"admin@test.com","password":"123456"}'
+
 # CHẠY API-GATEWAY
 cd /workspaces/distributed-hotel-booking/services/api-gateway
-chmod +x mvnw
+pwd
+ls
+ls src/main/resources
+
 ./mvnw clean spring-boot:run
+
+# LOGIN QUA API GATEWAY (LẤY TOKEN)
+
+curl -X POST http://localhost:8088/api/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email":"admin@test.com","password":"123456"}'
+
+# GỌI USER SERVICE QUA GATEWAY (JWT)
+curl http://localhost:8088/api/users \
+-H "Authorization: Bearer <TOKEN>"
+
 
 curl http://localhost:8082/users \
 -H "Authorization: Bearer <PASTE_TOKEN_HERE>"
