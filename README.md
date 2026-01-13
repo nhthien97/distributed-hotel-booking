@@ -2,6 +2,30 @@
 Distributed Hotel Booking System - Distributed Applications
 cd /workspaces/distributed-hotel-booking
 pwd
+# CHẠY BOOKING SERVICE
+cd /workspaces/distributed-hotel-booking
+cd services/booking-service
+mvn spring-boot:run
+
+curl -X POST http://localhost:8082/bookings \
+-H "Content-Type: application/json" \
+-d '{
+  "roomId": 900,
+  "userEmail": "admin@test.com",
+  "checkIn": "2026-07-10",
+  "checkOut": "2026-07-12"
+}'
+
+curl -X POST http://localhost:8088/api/bookings \
+-H "Content-Type: application/json" \
+-d '{
+  "roomId": 901,
+  "userEmail": "admin@test.com",
+  "checkIn": "2026-07-15",
+  "checkOut": "2026-07-17"
+}'
+
+curl http://localhost:8082/actuator/health
 
 # CHẠY USER-SERVICE
 cd services/user-service
@@ -51,8 +75,10 @@ curl http://localhost:8082/users \
 
 # Mở H2 Console
 http://localhost:8081/h2-console
+jdbc:h2:mem:bookingdb
 
 SELECT * FROM users;
+SELECT * FROM BOOKING;
 
 
 # Mở file shell config
