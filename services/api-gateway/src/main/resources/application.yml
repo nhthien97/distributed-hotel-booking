@@ -7,6 +7,24 @@ spring:
 
   cloud:
     gateway:
+
+      # ================== CORS (BẮT BUỘC CHO FRONTEND) ==================
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "https://ominous-trout-v67rqxvv9j4v2w7rr-5500.app.github.dev"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+      # ================== ROUTES ==================
       routes:
         - id: auth-service
           uri: http://localhost:8080

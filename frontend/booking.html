@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phenikaa Hotel</title>
+
+<style>
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #1a1a1a;
+}
+
+/* ================= HEADER ================= */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+nav a {
+    margin: 0 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.auth a {
+    margin-left: 10px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login {
+    border: 1px solid white;
+    color: white;
+}
+
+.register {
+    background: white;
+    color: #000;
+}
+
+/* ================= HERO SLIDER ================= */
+.hero {
+    position: relative;
+    height: 520px;
+    margin-top: 64px;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.75)
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: auto;
+    padding: 100px 20px;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.hero-content p {
+    font-size: 18px;
+    color: #e5e5e5;
+}
+
+/* ================= SEARCH ================= */
+.search-box {
+    margin-top: 30px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr auto;
+    gap: 8px;
+}
+
+.search-box input,
+.search-box select {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.search-box button {
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 26px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ================= CONTENT ================= */
+.container {
+    max-width: 1200px;
+    margin: -80px auto 60px;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 24px;
+    margin: 40px 0 20px;
+}
+
+/* ================= ROOM CARDS ================= */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.room-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+}
+
+.room-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.room-body {
+    padding: 18px;
+}
+
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.room-header h3 {
+    font-size: 18px;
+}
+
+.rating {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.room-info {
+    display: flex;
+    gap: 14px;
+    font-size: 13px;
+    color: #555;
+    margin: 10px 0;
+}
+
+.room-features {
+    list-style: none;
+    margin: 10px 0 16px;
+    font-size: 13px;
+    color: #444;
+}
+
+.room-features li {
+    margin-bottom: 4px;
+}
+
+.room-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: #666;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-outline {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    background: transparent;
+    cursor: pointer;
+}
+
+.btn-solid {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+    nav {
+        display: none;
+    }
+
+    .search-box {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 CHECK LOGIN -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Vui lòng đăng nhập");
+    location.replace("index.html");
+  }
+});
+</script>
+
+
+<header>
+    <div class="header-inner">
+        <div class="logo">PHENIKAA HOTEL</div>
+        <nav>
+            <a href="#">Trang chủ</a>
+            <a href="#">Tìm khách sạn</a>
+            <a href="#">Đặt phòng</a>
+            <a href="#">Thanh toán</a>
+            <a href="#">Lịch sử</a>
+        </nav>
+        <div class="auth" id="authArea"></div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb')"></div>
+    <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945')"></div>
+    <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa')"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>Trải nghiệm nghỉ dưỡng đẳng cấp</h1>
+        <p>Phenikaa Hotel – sang trọng, tiện nghi, chuyên nghiệp</p>
+
+        <div class="search-box">
+            <input placeholder="Bạn muốn đến đâu?">
+            <input type="date">
+            <input type="date">
+            <select>
+                <option>2 người · 1 phòng</option>
+                <option>3 người · 1 phòng</option>
+            </select>
+            <button>Tìm phòng</button>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="section-title">Các hạng phòng nổi bật</div>
+
+    <div class="cards">
+        <!-- Deluxe -->
+        <div class="room-card">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945">
+            <div class="room-body">
+                <div class="room-header">
+                    <h3>Phòng Deluxe</h3>
+                    <span class="rating">⭐ 4.8</span>
+                </div>
+                <div class="room-info">
+                    <span>👤 2 người</span>
+                    <span>📐 35m²</span>
+                    <span>🛏 1 giường đôi</span>
+                </div>
+                <ul class="room-features">
+                    <li>✔ Ban công riêng</li>
+                    <li>✔ Wifi miễn phí</li>
+                    <li>✔ Bữa sáng</li>
+                </ul>
+                <div class="room-footer">
+                    <div class="price">800.000đ <span>/ đêm</span></div>
+                    <div class="actions">
+                        <button class="btn-outline">Chi tiết</button>
+                        <button class="btn-solid">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Standard -->
+        <div class="room-card">
+            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa">
+            <div class="room-body">
+                <div class="room-header">
+                    <h3>Phòng Standard</h3>
+                    <span class="rating">⭐ 4.4</span>
+                </div>
+                <div class="room-info">
+                    <span>👤 2 người</span>
+                    <span>📐 28m²</span>
+                    <span>🛏 1 giường</span>
+                </div>
+                <ul class="room-features">
+                    <li>✔ Wifi miễn phí</li>
+                    <li>✔ Điều hoà</li>
+                </ul>
+                <div class="room-footer">
+                    <div class="price">600.000đ <span>/ đêm</span></div>
+                    <div class="actions">
+                        <button class="btn-outline">Chi tiết</button>
+                        <button class="btn-solid">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suite -->
+        <div class="room-card">
+            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb">
+            <div class="room-body">
+                <div class="room-header">
+                    <h3>Phòng Suite</h3>
+                    <span class="rating">⭐ 4.9</span>
+                </div>
+                <div class="room-info">
+                    <span>👤 4 người</span>
+                    <span>📐 55m²</span>
+                    <span>🛏 2 giường</span>
+                </div>
+                <ul class="room-features">
+                    <li>✔ Phòng khách riêng</li>
+                    <li>✔ Bồn tắm</li>
+                    <li>✔ View hồ bơi</li>
+                </ul>
+                <div class="room-footer">
+                    <div class="price">1.200.000đ <span>/ đêm</span></div>
+                    <div class="actions">
+                        <button class="btn-outline">Chi tiết</button>
+                        <button class="btn-solid">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* SLIDER */
+let index = 0;
+const slides = document.querySelectorAll(".slide");
+setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+}, 4000);
+
+/* AUTH UI */
+const email = localStorage.getItem("email");
+document.getElementById("authArea").innerHTML = `
+  <span style="color:white">👋 ${email}</span>
+  <a href="#" class="login" onclick="logout()">Đăng xuất</a>
+`;
+
+function logout(){
+  localStorage.clear();
+  location.href="index.html";
+}
+</script>
+
+</body>
+</html>

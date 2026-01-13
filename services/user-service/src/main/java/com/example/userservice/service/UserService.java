@@ -30,7 +30,7 @@ public class UserService {
                 request.getUsername(),
                 request.getEmail(),
                 encodedPassword,
-                request.getRole()
+                "CUSTOMER" // 🔥 FIX LỖI 500
         );
 
         return userRepository.save(user);
@@ -41,8 +41,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // 🔥 GET USER BY EMAIL (FOR AUTH-SERVICE)
-    // ❗ KHÔNG throw RuntimeException → tránh 500
+    // GET USER BY EMAIL (FOR AUTH-SERVICE)
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }

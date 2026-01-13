@@ -72,6 +72,8 @@ curl http://localhost:8088/api/users \
 curl http://localhost:8082/users \
 -H "Authorization: Bearer <PASTE_TOKEN_HERE>"
 
+cd /workspaces/distributed-hotel-booking/frontend
+python3 -m http.server 5500
 
 # Mở H2 Console
 http://localhost:8081/h2-console
