@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng nhập Admin | Phenikaa Hotel</title>
+
+<style>
+/* ===== RESET ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ===== BACKGROUND IMAGE ===== */
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb") 
+             center/cover no-repeat;
+  position:relative;
+}
+
+/* ===== OVERLAY MỜ ===== */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(6px);
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box{
+  position:relative;
+  width:360px;
+  background:white;
+  padding:32px;
+  border-radius:12px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  z-index:1;
+}
+
+.login-box h2{
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.login-box p{
+  text-align:center;
+  color:#666;
+  font-size:14px;
+  margin-bottom:24px;
+}
+
+.login-box input{
+  width:100%;
+  padding:14px;
+  margin-bottom:14px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:14px;
+}
+
+.login-box button{
+  width:100%;
+  padding:14px;
+  background:#000;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.login-box button:hover{
+  opacity:0.9;
+}
+
+.error{
+  margin-top:12px;
+  color:red;
+  font-size:14px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <h2>🔐 Đăng nhập quản trị</h2>
+  <p>Phenikaa Hotel Admin Panel</p>
+
+  <input type="email" id="email" placeholder="Email quản trị">
+  <input type="password" id="password" placeholder="Mật khẩu">
+
+  <button onclick="login()">Đăng nhập</button>
+
+  <div id="error" class="error"></div>
+</div>
+
+<script>
+function login(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/auth/login", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ email, password })
+  })
+  .then(res => {
+    if(!res.ok) throw new Error("Login failed");
+    return res.json();
+  })
+  .then(data => {
+    if(data.role !== "ADMIN"){
+      document.getElementById("error").innerText =
+        "⛔ Tài khoản không có quyền quản trị";
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
+    localStorage.setItem("email", data.email);
+
+    location.href = "admin.html";
+  })
+  .catch(()=>{
+    document.getElementById("error").innerText =
+      "Sai email hoặc mật khẩu";
+  });
+}
+</script>
+
+</body>
+</html>

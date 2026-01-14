@@ -304,12 +304,13 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="header-inner">
         <div class="logo">PHENIKAA HOTEL</div>
         <nav>
-            <a href="#">Trang chủ</a>
-            <a href="#">Tìm khách sạn</a>
-            <a href="#">Đặt phòng</a>
-            <a href="#">Thanh toán</a>
-            <a href="#">Lịch sử</a>
-        </nav>
+  <a href="booking.html">Trang chủ</a>
+  <a href="booking.html">Tìm khách sạn</a>
+  <a href="booking.html">Đặt phòng</a>
+  <a href="payment.html">Thanh toán</a>
+  <a href="history.html">Lịch sử</a>
+</nav>
+
         <div class="auth" id="authArea"></div>
     </div>
 </header>
@@ -332,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <option>2 người · 1 phòng</option>
                 <option>3 người · 1 phòng</option>
             </select>
-            <button>Tìm phòng</button>
+            <button onclick="location.href='booking.html'">Tìm phòng</button>
         </div>
     </div>
 </section>
@@ -363,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="price">800.000đ <span>/ đêm</span></div>
                     <div class="actions">
                         <button class="btn-outline">Chi tiết</button>
-                        <button class="btn-solid">Đặt phòng</button>
+                        <button class="btn-solid" onclick="location.href='booking.html'">Đặt phòng</button>
                     </div>
                 </div>
             </div>

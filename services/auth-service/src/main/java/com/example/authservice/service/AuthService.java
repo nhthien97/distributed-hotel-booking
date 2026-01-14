@@ -21,6 +21,32 @@ public class AuthService {
 
     public AuthResult login(String email, String password) {
 
+        /* =========================================================
+           ✅ ADMIN CỨNG – PHỤC VỤ QUẢN TRỊ (CHO ĐỒ ÁN)
+           ========================================================= */
+
+        // ADMIN 1
+        if (
+            email.equals("23010139@gmail.com") &&
+            password.equals("nht123456")
+        ) {
+            String token = jwtUtil.generateToken(email, "ADMIN");
+            return new AuthResult(token, "ADMIN");
+        }
+
+        // ADMIN 2
+        if (
+            email.equals("23010192@gmail.com") &&
+            password.equals("pnv123456")
+        ) {
+            String token = jwtUtil.generateToken(email, "ADMIN");
+            return new AuthResult(token, "ADMIN");
+        }
+
+        /* =========================================================
+           👤 USER THƯỜNG – KIỂM TRA QUA USER-SERVICE
+           ========================================================= */
+
         UserResponse user = userClient.getUserByEmail(email);
 
         if (user == null || user.getPassword() == null
@@ -32,6 +58,9 @@ public class AuthService {
         return new AuthResult(token, user.getRole());
     }
 
+    /* =========================================================
+       DTO TRẢ KẾT QUẢ LOGIN
+       ========================================================= */
     public static class AuthResult {
         private final String token;
         private final String role;

@@ -4,6 +4,8 @@ import com.example.bookingservice.entity.Booking;
 import com.example.bookingservice.repository.BookingRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
@@ -24,5 +26,11 @@ public class BookingController {
 
         booking.setStatus("CONFIRMED");
         return bookingRepository.save(booking);
+    }
+
+    // ✅ API CHO ADMIN XEM TẤT CẢ BOOKING
+    @GetMapping
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
     }
 }
