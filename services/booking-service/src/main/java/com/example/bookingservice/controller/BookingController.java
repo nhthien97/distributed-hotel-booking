@@ -8,6 +8,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
+@CrossOrigin(
+    origins = "https://ominous-trout-v67rqxvv9j4v2w7rr-5500.app.github.dev",
+    allowedHeaders = "*"
+)
 public class BookingController {
 
     private final BookingRepository bookingRepository;
@@ -16,19 +20,12 @@ public class BookingController {
         this.bookingRepository = bookingRepository;
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     public Booking createBooking(@RequestBody Booking booking) {
-
-        // 🔒 Distributed Lock (PSEUDO – Redis)
-        // Key: room:{roomId}:{checkIn}
-        // if exists -> reject
-        // else -> save booking -> release lock
-
         booking.setStatus("CONFIRMED");
         return bookingRepository.save(booking);
     }
 
-    // ✅ API CHO ADMIN XEM TẤT CẢ BOOKING
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();

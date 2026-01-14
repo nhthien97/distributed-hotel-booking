@@ -55,7 +55,7 @@ cd /workspaces/distributed-hotel-booking/services/api-gateway
 pwd
 ls
 ls src/main/resources
-
+cd /workspaces/distributed-hotel-booking/services/api-gateway
 ./mvnw clean spring-boot:run
 
 # LOGIN QUA API GATEWAY (LẤY TOKEN)
