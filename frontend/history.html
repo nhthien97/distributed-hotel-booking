@@ -46,21 +46,43 @@ fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user
 
     activeEl.innerHTML = active.length === 0
     ? "<p>Không có booking đang hoạt động</p>"
-    : active.map(b => `
-        <div>
-            <p>Mã: ${b.id}</p>
-            <p>Phòng: ${b.roomId}</p>
-            <p>${b.checkIn} → ${b.checkOut}</p>
+    : activeEl.innerHTML = active.length === 0
+  ? "<p>Không có booking đang hoạt động</p>"
+  : active.map(b => `
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px">
 
-            ${
-                b.status === "PENDING_PAYMENT"
-                ? `<button onclick="payBooking(${b.id})">💳 Thanh toán</button>`
-                : ""
-            }
+      <p><strong>Mã:</strong> ${b.id}</p>
+      <p><strong>Phòng:</strong> ${b.roomId}</p>
+      <p>${b.checkIn} → ${b.checkOut}</p>
 
+      ${
+        b.status === "PENDING_PAYMENT"
+          ? `
+            <button onclick="payBooking(${b.id})">💳 Thanh toán</button>
             <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
-        </div>
-    `).join("");
+          `
+          : ""
+      }
+
+      ${
+        b.status === "PAYMENT_FAILED"
+          ? `
+            <p style="color:red">❌ Thanh toán thất bại</p>
+            <button onclick="payBooking(${b.id})">💳 Thanh toán lại</button>
+            <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
+          `
+          : ""
+      }
+
+      ${
+        b.status === "CONFIRMED"
+          ? `<p style="color:green">✅ Đã thanh toán</p>`
+          : ""
+      }
+
+    </div>
+  `).join("");
+
 
     cancelledEl.innerHTML = cancelled.length === 0
         ? "<p>Chưa có booking bị hủy</p>"
