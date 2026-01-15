@@ -433,7 +433,8 @@ function bookRoom(roomId) {
         body: JSON.stringify({
             roomId: roomId,
             checkIn: checkIn,
-            checkOut: checkOut
+            checkOut: checkOut,
+            userEmail: localStorage.getItem("email")
         })
     })
     .then(res => {
@@ -443,9 +444,15 @@ function bookRoom(roomId) {
         return res.json();
     })
     .then(data => {
-        alert("✅ Đặt phòng thành công");
-        console.log("BOOKING RESULT:", data);
-    })
+    alert("✅ Đặt phòng thành công\nMã booking: " + data.id);
+
+    // lưu mã booking (tuỳ chọn)
+    localStorage.setItem("lastBookingId", data.id);
+
+    // chuyển sang lịch sử
+    window.location.href = "history.html";
+})
+
     .catch(err => {
         console.error(err);
         alert("❌ Đặt phòng thất bại");

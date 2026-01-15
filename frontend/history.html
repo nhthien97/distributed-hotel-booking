@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Lịch sử đặt phòng</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<h2>📜 Lịch sử đặt phòng</h2>
+
+<h3>🟢 Booking đang hoạt động</h3>
+<div id="activeBookingList">Đang tải...</div>
+
+<hr>
+
+<h3>🔴 Lịch sử hủy</h3>
+<div id="cancelledBookingList">Chưa có</div>
+
+
+<script>
+const token = localStorage.getItem("token");
+const email = localStorage.getItem("email");
+
+if (!token || !email) {
+    alert("Vui lòng đăng nhập");
+    location.href = "index.html";
+}
+
+fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user?email=${email}`, {
+    headers: {
+        "Authorization": "Bearer " + token
+    }
+})
+.then(res => {
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+})
+.then(bookings => {
+    const activeEl = document.getElementById("activeBookingList");
+    const cancelledEl = document.getElementById("cancelledBookingList");
+
+    const active = bookings.filter(b => b.status !== "CANCELLED");
+    const cancelled = bookings.filter(b => b.status === "CANCELLED");
+
+    activeEl.innerHTML = active.length === 0
+        ? "<p>Không có booking đang hoạt động</p>"
+        : active.map(b => `
+            <div>
+                <p>Mã: ${b.id}</p>
+                <p>Phòng: ${b.roomId}</p>
+                <p>${b.checkIn} → ${b.checkOut}</p>
+                <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
+            </div>
+        `).join("");
+
+    cancelledEl.innerHTML = cancelled.length === 0
+        ? "<p>Chưa có booking bị hủy</p>"
+        : cancelled.map(b => `
+            <div style="color:red">
+                <p>Mã: ${b.id}</p>
+                <p>Phòng: ${b.roomId}</p>
+                <p>${b.checkIn} → ${b.checkOut}</p>
+                <p>❌ Đã hủy</p>
+            </div>
+        `).join("");
+})
+.catch(err => {
+    console.error(err);
+    alert("Không tải được lịch sử đặt phòng");
+});
+</script>
+
+
+<script>
+function cancelBooking(bookingId) {
+    if (!confirm("Bạn chắc chắn muốn hủy booking này?")) return;
+
+    fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/${bookingId}/cancel`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Cancel failed");
+        alert("✅ Đã hủy booking");
+        location.reload();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("❌ Hủy booking thất bại");
+    });
+}
+</script>
+
+</body>
+</html>

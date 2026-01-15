@@ -9,6 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rooms")
+@CrossOrigin(
+    origins = "*",
+    allowedHeaders = "*",
+    methods = {RequestMethod.GET, RequestMethod.POST}
+)
 public class RoomController {
 
     private final RoomService roomService;
