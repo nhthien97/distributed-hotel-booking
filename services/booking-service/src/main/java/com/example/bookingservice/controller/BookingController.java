@@ -24,7 +24,7 @@ public class BookingController {
     @PostMapping(consumes = "application/json")
 public Booking createBooking(@RequestBody Booking booking) {
 
-    booking.setStatus("CONFIRMED");
+    booking.setStatus("PENDING_PAYMENT");
 
     // ⚠️ TẠM THỜI GÁN USER (vì chưa decode JWT)
     if (booking.getUserEmail() == null) {
@@ -53,6 +53,27 @@ public Booking cancelBooking(@PathVariable Long id) {
             .orElseThrow(() -> new RuntimeException("Booking not found"));
 
     booking.setStatus("CANCELLED");
+    return bookingRepository.save(booking);
+}
+// ✅ PAYMENT SUCCESS
+@PutMapping("/{id}/confirm")
+public Booking confirmBooking(@PathVariable Long id) {
+
+    Booking booking = bookingRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+    booking.setStatus("CONFIRMED");
+    return bookingRepository.save(booking);
+}
+
+// ❌ PAYMENT FAILED
+@PutMapping("/{id}/fail")
+public Booking failBooking(@PathVariable Long id) {
+
+    Booking booking = bookingRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+    booking.setStatus("PAYMENT_FAILED");
     return bookingRepository.save(booking);
 }
 

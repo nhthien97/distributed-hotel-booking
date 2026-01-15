@@ -2,10 +2,6 @@
 Distributed Hotel Booking System - Distributed Applications
 cd /workspaces/distributed-hotel-booking
 pwd
-# CHẠY BOOKING SERVICE
-cd /workspaces/distributed-hotel-booking
-cd services/booking-service
-mvn spring-boot:run
 
 # CHẠY USER-SERVICE
 cd services/user-service

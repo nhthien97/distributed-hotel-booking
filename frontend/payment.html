@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+</head>
+<body>
+
+<h2>💳 Thanh toán booking</h2>
+
+<p><strong>Mã booking:</strong> <span id="bookingId"></span></p>
+<p><strong>Số tiền:</strong> 300.000 VND</p>
+
+<button onclick="pay()">Thanh toán</button>
+
+<p id="result"></p>
+
+<script>
+const bookingId = localStorage.getItem("lastBookingId");
+
+if (!bookingId) {
+    alert("Không tìm thấy booking!");
+    window.location.href = "booking.html";
+}
+
+document.getElementById("bookingId").innerText = bookingId;
+
+function pay() {
+    fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8084.app.github.dev/payments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            bookingId: bookingId,
+            amount: 300000
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "SUCCESS") {
+    document.getElementById("result").innerText =
+        "✅ Thanh toán thành công! Đang chuyển về lịch sử...";
+
+    // Xóa booking đang thanh toán
+    localStorage.removeItem("lastBookingId");
+
+    // Tự động quay về lịch sử
+    setTimeout(() => {
+        window.location.href = "history.html";
+    }, 1500);
+        } else {
+            document.getElementById("result").innerText =
+                "❌ Thanh toán thất bại. Vui lòng thử lại!";
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Lỗi thanh toán");
+    });
+}
+</script>
+
+</body>
+</html>

@@ -45,15 +45,22 @@ fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user
     const cancelled = bookings.filter(b => b.status === "CANCELLED");
 
     activeEl.innerHTML = active.length === 0
-        ? "<p>Không có booking đang hoạt động</p>"
-        : active.map(b => `
-            <div>
-                <p>Mã: ${b.id}</p>
-                <p>Phòng: ${b.roomId}</p>
-                <p>${b.checkIn} → ${b.checkOut}</p>
-                <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
-            </div>
-        `).join("");
+    ? "<p>Không có booking đang hoạt động</p>"
+    : active.map(b => `
+        <div>
+            <p>Mã: ${b.id}</p>
+            <p>Phòng: ${b.roomId}</p>
+            <p>${b.checkIn} → ${b.checkOut}</p>
+
+            ${
+                b.status === "PENDING_PAYMENT"
+                ? `<button onclick="payBooking(${b.id})">💳 Thanh toán</button>`
+                : ""
+            }
+
+            <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
+        </div>
+    `).join("");
 
     cancelledEl.innerHTML = cancelled.length === 0
         ? "<p>Chưa có booking bị hủy</p>"
@@ -89,6 +96,13 @@ function cancelBooking(bookingId) {
         console.error(err);
         alert("❌ Hủy booking thất bại");
     });
+}
+</script>
+
+<script>
+function payBooking(bookingId) {
+    localStorage.setItem("lastBookingId", bookingId);
+    window.location.href = "payment.html";
 }
 </script>
 
