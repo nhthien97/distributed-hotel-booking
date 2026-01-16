@@ -76,5 +76,10 @@ public Booking failBooking(@PathVariable Long id) {
     booking.setStatus("PAYMENT_FAILED");
     return bookingRepository.save(booking);
 }
+// ✅ LẤY DANH SÁCH BOOKING ĐÃ XÁC NHẬN (PHÒNG ĐÃ ĐƯỢC BOOK)
+@GetMapping("/active")
+public List<Booking> getActiveBookings() {
+    return bookingRepository.findByStatus("CONFIRMED");
+}
 
 }

@@ -20,13 +20,17 @@ mvn spring-boot:run
 cd /workspaces/distributed-hotel-booking/services/api-gateway
 ./mvnw clean spring-boot:run
 
-# web
-cd /workspaces/distributed-hotel-booking/frontend
-python3 -m http.server 5500
-
 # room-service
 cd services/room-service
 mvn spring-boot:run
+
+# Payment Service
+cd services/payment-service
+mvn spring-boot:run
+
+# web
+cd /workspaces/distributed-hotel-booking/frontend
+python3 -m http.server 5500
 
 
 # LOGIN QUA API GATEWAY (LẤY TOKEN)

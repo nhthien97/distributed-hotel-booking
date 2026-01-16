@@ -168,7 +168,7 @@ nav a:hover {
 /* ================= ROOM CARDS ================= */
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
@@ -335,6 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <option value="4">4 người · 1 phòng</option>
     </select>
     <button onclick="searchRooms()">Tìm phòng</button>
+
 </div>
 
     </div>
@@ -387,6 +388,7 @@ function renderRooms(rooms) {
     }
 
     rooms.forEach(room => {
+        const isBooked = bookedRoomIds.includes(room.id);
         const card = document.createElement("div");
         card.className = "room-card";
 
@@ -399,13 +401,18 @@ function renderRooms(rooms) {
                     <span>👤 ${room.capacity} người</span>
                     <span>📐 ${room.area || "-"} m²</span>
                 </div>
-                <div class="room-footer">
-                    <div class="price">${room.price}đ <span>/ đêm</span></div>
-                    <button class="btn-solid" onclick="bookRoom(${room.id})">
-    Đặt phòng
-</button>
+                const isBooked = bookedRoomIds.includes(room.id);
 
-                </div>
+<div class="room-footer">
+    <div class="price">${room.price}đ <span>/ đêm</span></div>
+
+    ${
+        isBooked
+        ? `<button class="btn-outline" disabled>Đã được booking</button>`
+        : `<button class="btn-solid" onclick="bookRoom(${room.id})">Đặt phòng</button>`
+    }
+</div>
+
             </div>
         `;
         roomList.appendChild(card);
@@ -482,6 +489,69 @@ function logout(){
   location.href="index.html";
 }
 </script>
+
+<script>
+    let bookedRoomIds = [];
+document.addEventListener("DOMContentLoaded", () => {
+    loadAllRooms();
+});
+
+function loadAllRooms() {
+    Promise.all([
+        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8083.app.github.dev/rooms")
+            .then(res => res.json()),
+        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/active")
+            .then(res => res.json())
+    ])
+    .then(([rooms, bookings]) => {
+        bookedRoomIds = bookings.map(b => b.roomId);
+        renderRooms(rooms);
+    })
+    .catch(err => console.error(err));
+}
+
+</script>
+
+
+<style>
+.room-container {
+    padding: 40px 80px;
+    background: #f5f6f7;
+}
+
+#roomList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.room-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-4px);
+}
+
+.room-card h4 {
+    margin: 0 0 10px;
+}
+
+.room-card button {
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+</style>
+
 
 </body>
 </html>

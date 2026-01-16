@@ -20,11 +20,12 @@ public class RoomService {
      * SEARCH PHÒNG THEO SỐ NGƯỜI
      * (hiện tại CHƯA kiểm tra trùng ngày – đủ cho đồ án)
      */
-    public List<Room> searchAvailableRooms(
-            int capacity,
-            LocalDate checkIn,
-            LocalDate checkOut
-    ) {
-        return roomRepository.findByCapacityGreaterThanEqual(capacity);
-    }
+    public List<Room> searchAvailableRooms(int capacity, LocalDate checkIn, LocalDate checkOut) {
+    return roomRepository.findByCapacity(capacity);
+}
+
+    public List<Room> getAllRooms() {
+    return roomRepository.findAll();
+}
+
 }

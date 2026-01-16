@@ -30,4 +30,9 @@ public class RoomController {
     ) {
         return roomService.searchAvailableRooms(capacity, checkIn, checkOut);
     }
+    @GetMapping
+public List<Room> getAllRooms() {
+    return roomService.getAllRooms();
+}
+
 }
