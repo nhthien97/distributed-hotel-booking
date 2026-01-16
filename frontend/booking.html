@@ -155,9 +155,9 @@ nav a:hover {
 
 /* ================= CONTENT ================= */
 .container {
-    max-width: 1200px;
-    margin: -80px auto 60px;
-    padding: 0 20px;
+    width: 100%;
+    margin: -80px 0 60px;
+    padding: 0 80px;
 }
 
 .section-title {
@@ -168,8 +168,9 @@ nav a:hover {
 /* ================= ROOM CARDS ================= */
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
+    width: 100%;
 }
 
 .room-card {
@@ -393,28 +394,27 @@ function renderRooms(rooms) {
         card.className = "room-card";
 
         card.innerHTML = `
-            <div class="room-body">
-                <div class="room-header">
-                    <h3>${room.name}</h3>
-                </div>
-                <div class="room-info">
-                    <span>👤 ${room.capacity} người</span>
-                    <span>📐 ${room.area || "-"} m²</span>
-                </div>
-                const isBooked = bookedRoomIds.includes(room.id);
+    <div class="room-body">
+        <div class="room-header">
+            <h3>${room.name}</h3>
+        </div>
 
-<div class="room-footer">
-    <div class="price">${room.price}đ <span>/ đêm</span></div>
+        <div class="room-info">
+            <span>👤 ${room.capacity} người</span>
+        </div>
 
-    ${
-        isBooked
-        ? `<button class="btn-outline" disabled>Đã được booking</button>`
-        : `<button class="btn-solid" onclick="bookRoom(${room.id})">Đặt phòng</button>`
-    }
-</div>
+        <div class="room-footer">
+            <div class="price">${room.price}đ <span>/ đêm</span></div>
 
-            </div>
-        `;
+            ${
+                isBooked
+                ? `<button class="btn-outline" disabled>Đã được booking</button>`
+                : `<button class="btn-solid" onclick="bookRoom(${room.id})">Đặt phòng</button>`
+            }
+        </div>
+    </div>
+`;
+
         roomList.appendChild(card);
     });
 }
@@ -514,24 +514,12 @@ function loadAllRooms() {
 
 
 <style>
-.room-container {
-    padding: 40px 80px;
-    background: #f5f6f7;
-}
-
-#roomList {
+.cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
-.room-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease;
-}
 
 .room-card:hover {
     transform: translateY(-4px);
