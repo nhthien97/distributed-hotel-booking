@@ -545,14 +545,21 @@ function renderRooms(rooms) {
             </div>
 
             <div class="room-footer">
-                <div class="price">${room.price}đ <span>/ đêm</span></div>
-                ${
-                    isBooked
-                    ? `<button class="btn-outline" disabled>Đã được booking</button>`
-                    : `<button class="btn-solid" onclick="bookRoom(${room.id})">Đặt phòng</button>`
-                }
-            </div>
-        </div>
+    <div class="price">${room.price}đ <span>/ đêm</span></div>
+
+    <div class="actions">
+        <button class="btn-outline" onclick="openRoomModal(${room.id})">
+            Xem chi tiết
+        </button>
+
+        ${
+            isBooked
+            ? `<button class="btn-outline" disabled>Đã được booking</button>`
+            : `<button class="btn-solid" onclick="bookRoom(${room.id})">Đặt phòng</button>`
+        }
+    </div>
+</div>
+
     `;
 
     roomList.appendChild(card);
