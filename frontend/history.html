@@ -2,129 +2,329 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Lịch sử đặt phòng</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch sử đặt phòng</title>
+
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+  padding-top: 40px;
+  background: linear-gradient(
+    180deg,
+    #6a7a7b 0%,
+    #3f8c94 100%
+  );
+}
+
+
+
+/* ===== NAVBAR (COPY TỪ BOOKING) ===== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+nav a {
+  margin: 0 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.auth a {
+  margin-left: 10px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login {
+  border: 1px solid white;
+  color: white;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+  text-align: center;
+  padding: 40px 16px 20px;
+}
+
+.page-header h1 {
+  font-size: 32px;
+}
+
+.page-header p {
+  margin-top: 8px;
+  color: #666;
+}
+
+/* ===== TAB WRAPPER ===== */
+.tab-wrapper {
+  max-width: 980px;
+  margin: 8px auto 60px; /* 👈 ĐÃ ĐẨY TAB LÊN */
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+}
+
+/* ===== TAB HEADER ===== */
+.tab-header {
+  position: relative;
+  display: flex;
+  height: 60px;
+  background: #f1f1f1;
+}
+
+.tab-header button {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2;
+  color: #666;
+}
+
+.tab-header button.active {
+  color: white;
+  font-weight: 600;
+}
+
+/* ===== INDICATOR ===== */
+.tab-indicator {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: calc(50% - 12px);
+  height: calc(100% - 12px);
+  border-radius: 14px;
+
+  /* ✅ GIỮ NGUYÊN MÀU NHƯ HÌNH */
+  background: linear-gradient(
+    135deg,
+    #7b8b8c,   /* xám xanh */
+    #4f9da6    /* xanh ngọc */
+  );
+
+  transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+  z-index: 1;
+}
+
+
+/* ===== TAB CONTENT ===== */
+.tab-content {
+  display: flex;
+  width: 200%;
+  transition: transform 0.4s ease;
+}
+
+.tab-panel {
+  width: 50%;
+  padding: 30px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e4e6e8;
+}
+
+.card h3 {
+  margin-bottom: 6px;
+}
+
+.card p {
+  color: #666;
+}
+
+/* ===== STATUS ===== */
+.status {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.status.active {
+  background: #e8f6f7;
+  color: #1c7c86;
+}
+
+.status.cancelled {
+  background: #fdecea;
+  color: #d32f2f;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-pay {
+  background: #000;
+  color: white;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+}
+</style>
 </head>
 
 <body>
 
-<h2>📜 Lịch sử đặt phòng</h2>
+<!-- ===== NAVBAR ===== -->
+<header>
+  <div class="header-inner">
+    <div class="logo">PHENIKAA HOTEL</div>
+    <nav>
+      <a href="booking.html">Trang chủ</a>
+      <a href="booking.html#search">Đặt phòng</a>
+      <a href="payment.html">Thanh toán</a>
+      <a href="history.html">Lịch sử</a>
+    </nav>
+    <div class="auth" id="authArea"></div>
+  </div>
+</header>
 
-<h3>🟢 Booking đang hoạt động</h3>
-<div id="activeBookingList">Đang tải...</div>
+<!-- ===== HEADER ===== -->
+<div class="page-header">
+  <h1>Lịch sử đặt phòng</h1>
+</div>
 
-<hr>
+<!-- ===== TABS ===== -->
+<div class="tab-wrapper">
+  <div class="tab-header">
+    <div class="tab-indicator"></div>
+    <button class="tab-btn active" onclick="switchTab(0)">Đang hoạt động</button>
+    <button class="tab-btn" onclick="switchTab(1)">Đã huỷ</button>
+  </div>
 
-<h3>🔴 Lịch sử hủy</h3>
-<div id="cancelledBookingList">Chưa có</div>
-
+  <div class="tab-content" id="tabContent">
+    <div class="tab-panel" id="activeList">Đang tải...</div>
+    <div class="tab-panel" id="cancelList">Đang tải...</div>
+  </div>
+</div>
 
 <script>
-const token = localStorage.getItem("token");
+/* ===== TAB ===== */
+function switchTab(i){
+  document.querySelector(".tab-indicator").style.transform = `translateX(${i*100}%)`;
+  document.getElementById("tabContent").style.transform = `translateX(-${i*50}%)`;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".tab-btn")[i].classList.add("active");
+}
+
+/* ===== AUTH ===== */
 const email = localStorage.getItem("email");
+document.getElementById("authArea").innerHTML = `
+  <span style="color:white">👋 ${email}</span>
+  <a href="#" class="login" onclick="logout()">Đăng xuất</a>
+`;
 
-if (!token || !email) {
-    alert("Vui lòng đăng nhập");
-    location.href = "index.html";
+function logout(){
+  localStorage.clear();
+  location.href="index.html";
 }
 
-fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user?email=${email}`, {
-    headers: {
-        "Authorization": "Bearer " + token
-    }
+/* ===== LOAD BOOKINGS ===== */
+const token = localStorage.getItem("token");
+
+fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user?email=${email}`,{
+  headers:{ Authorization:"Bearer "+token }
 })
-.then(res => {
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    return res.json();
-})
-.then(bookings => {
-    const activeEl = document.getElementById("activeBookingList");
-    const cancelledEl = document.getElementById("cancelledBookingList");
+.then(r=>r.json())
+.then(data=>{
+  const active = data.filter(b=>b.status!=="CANCELLED");
+  const cancelled = data.filter(b=>b.status==="CANCELLED");
 
-    const active = bookings.filter(b => b.status !== "CANCELLED");
-    const cancelled = bookings.filter(b => b.status === "CANCELLED");
+  document.getElementById("activeList").innerHTML =
+    active.length===0 ? "<p>Không có booking</p>" :
+    active.map(b=>`
+      <div class="card">
+        <div>
+          <h3>Phòng ${b.roomId}</h3>
+          <p>${b.checkIn} → ${b.checkOut}</p>
+          <span class="status active">Đang hoạt động</span>
+        </div>
+        <div>
+          ${b.status==="PENDING_PAYMENT"
+            ? `<button class="btn btn-pay" onclick="pay(${b.id})">Thanh toán</button>
+               <button class="btn btn-cancel" onclick="cancel(${b.id})">Huỷ</button>`
+            : `<span>✅ Đã thanh toán</span>`
+          }
+        </div>
+      </div>
+    `).join("");
 
-    activeEl.innerHTML = active.length === 0
-    ? "<p>Không có booking đang hoạt động</p>"
-    : activeEl.innerHTML = active.length === 0
-  ? "<p>Không có booking đang hoạt động</p>"
-  : active.map(b => `
-    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px">
-
-      <p><strong>Mã:</strong> ${b.id}</p>
-      <p><strong>Phòng:</strong> ${b.roomId}</p>
-      <p>${b.checkIn} → ${b.checkOut}</p>
-
-      ${
-        b.status === "PENDING_PAYMENT"
-          ? `
-            <button onclick="payBooking(${b.id})">💳 Thanh toán</button>
-            <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
-          `
-          : ""
-      }
-
-      ${
-        b.status === "PAYMENT_FAILED"
-          ? `
-            <p style="color:red">❌ Thanh toán thất bại</p>
-            <button onclick="payBooking(${b.id})">💳 Thanh toán lại</button>
-            <button onclick="cancelBooking(${b.id})">❌ Hủy</button>
-          `
-          : ""
-      }
-
-      ${
-        b.status === "CONFIRMED"
-          ? `<p style="color:green">✅ Đã thanh toán</p>`
-          : ""
-      }
-
-    </div>
-  `).join("");
-
-
-    cancelledEl.innerHTML = cancelled.length === 0
-        ? "<p>Chưa có booking bị hủy</p>"
-        : cancelled.map(b => `
-            <div style="color:red">
-                <p>Mã: ${b.id}</p>
-                <p>Phòng: ${b.roomId}</p>
-                <p>${b.checkIn} → ${b.checkOut}</p>
-                <p>❌ Đã hủy</p>
-            </div>
-        `).join("");
-})
-.catch(err => {
-    console.error(err);
-    alert("Không tải được lịch sử đặt phòng");
+  document.getElementById("cancelList").innerHTML =
+    cancelled.length===0 ? "<p>Chưa có</p>" :
+    cancelled.map(b=>`
+      <div class="card">
+        <div>
+          <h3>Phòng ${b.roomId}</h3>
+          <p>${b.checkIn} → ${b.checkOut}</p>
+          <span class="status cancelled">Đã huỷ</span>
+        </div>
+      </div>
+    `).join("");
 });
-</script>
 
-
-<script>
-function cancelBooking(bookingId) {
-    if (!confirm("Bạn chắc chắn muốn hủy booking này?")) return;
-
-    fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/${bookingId}/cancel`, {
-        method: "PUT"
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Cancel failed");
-        alert("✅ Đã hủy booking");
-        location.reload();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("❌ Hủy booking thất bại");
-    });
+function pay(id){
+  localStorage.setItem("lastBookingId",id);
+  location.href="payment.html";
 }
-</script>
 
-<script>
-function payBooking(bookingId) {
-    localStorage.setItem("lastBookingId", bookingId);
-    window.location.href = "payment.html";
+function cancel(id){
+  if(!confirm("Huỷ booking?")) return;
+  fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/${id}/cancel`,{method:"PUT"})
+    .then(()=>location.reload());
 }
 </script>
 
