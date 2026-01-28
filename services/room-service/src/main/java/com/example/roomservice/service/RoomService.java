@@ -16,16 +16,24 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    /**
-     * SEARCH PHÒNG THEO SỐ NGƯỜI
-     * (hiện tại CHƯA kiểm tra trùng ngày – đủ cho đồ án)
-     */
-    public List<Room> searchAvailableRooms(int capacity, LocalDate checkIn, LocalDate checkOut) {
-    return roomRepository.findByCapacity(capacity);
-}
+    // 🔍 SEARCH AVAILABLE ROOMS (đã có)
+    public List<Room> searchAvailableRooms(
+            int capacity,
+            LocalDate checkIn,
+            LocalDate checkOut
+    ) {
+        // ⚠️ hiện tại demo: chỉ lọc theo capacity
+        return roomRepository.findByCapacity(capacity);
+    }
 
+    // 📋 ADMIN: GET ALL ROOMS
     public List<Room> getAllRooms() {
-    return roomRepository.findAll();
-}
+        return roomRepository.findAll();
+    }
 
+    // 🔥 GET ROOM BY ID (CHO BOOKING ADMIN)
+    public Room getRoomById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+    }
 }

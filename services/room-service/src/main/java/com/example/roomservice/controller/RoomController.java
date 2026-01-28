@@ -9,11 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rooms")
-@CrossOrigin(
-    origins = "*",
-    allowedHeaders = "*",
-    methods = {RequestMethod.GET, RequestMethod.POST}
-)
 public class RoomController {
 
     private final RoomService roomService;
@@ -22,6 +17,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
+    // 🔍 SEARCH ROOM
     @GetMapping("/search")
     public List<Room> searchRooms(
             @RequestParam int capacity,
@@ -30,9 +26,16 @@ public class RoomController {
     ) {
         return roomService.searchAvailableRooms(capacity, checkIn, checkOut);
     }
-    @GetMapping
-public List<Room> getAllRooms() {
-    return roomService.getAllRooms();
-}
 
+    // 📋 GET ALL ROOMS (ADMIN)
+    @GetMapping
+    public List<Room> getAllRooms() {
+        return roomService.getAllRooms();
+    }
+
+    // 🔥 GET ROOM BY ID (BOOKING ADMIN)
+    @GetMapping("/{id}")
+    public Room getRoomById(@PathVariable Long id) {
+        return roomService.getRoomById(id);
+    }
 }

@@ -35,6 +35,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- 🔐 Spring Security (BẮT BUỘC) -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+
         <!-- ✅ Validation (@Valid, @NotNull, ...) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

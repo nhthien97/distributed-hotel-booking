@@ -321,29 +321,39 @@ if (!bookingId) {
 document.getElementById("bookingId").innerText = bookingId;
 
 function pay() {
-  fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8084.app.github.dev/payments", {
+  fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/payments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      bookingId: bookingId,
+      bookingId: Number(bookingId),
       amount: 300000
     })
   })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === "SUCCESS") {
-      document.getElementById("successBox").classList.add("show");
-      localStorage.removeItem("lastBookingId");
-
-      setTimeout(() => {
-        location.href = "history.html";
-      }, 3000);
-    } else {
-      alert("❌ Thanh toán thất bại");
+  .then(async res => {
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(msg || "❌ Không thể thanh toán");
     }
+    return res.json();
   })
-  .catch(() => alert("Lỗi thanh toán"));
+  .then(data => {
+    document.getElementById("successBox").classList.add("show");
+    localStorage.removeItem("lastBookingId");
+
+    setTimeout(() => {
+      location.href = "history.html";
+    }, 3000);
+  })
+  .catch(err => {
+    alert(err.message);
+    // reset slider để kéo lại
+    document.getElementById("slideHandle").style.left = "4px";
+    document.getElementById("slideFill").style.width = "0";
+    document.querySelector(".slide-text").style.opacity = "1";
+    document.getElementById("slideHandle").style.pointerEvents = "auto";
+  });
 }
+
 </script>
 
 <script>

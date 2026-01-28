@@ -492,12 +492,13 @@ function searchRooms() {
         return;
     }
 
-    const url = `https://ominous-trout-v67rqxvv9j4v2w7rr-8083.app.github.dev/rooms/search?capacity=${capacity}&checkIn=${checkIn}&checkOut=${checkOut}`;
+   const url = `https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/rooms/search?capacity=${capacity}&checkIn=${checkIn}&checkOut=${checkOut}`;
 
     fetch(url)
         .then(res => res.json())
         .then(data => {
             console.log("ROOMS:", data);
+            currentRooms = data;  
             renderRooms(data);
         })
         .catch(err => {
@@ -578,8 +579,7 @@ function bookRoom(roomId) {
         alert("Thiếu ngày check-in hoặc check-out");
         return;
     }
-
-    fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings", {
+        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/bookings", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -708,9 +708,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadAllRooms() {
     Promise.all([
-        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8083.app.github.dev/rooms")
+        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/rooms")
             .then(res => res.json()),
-        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/active")
+        fetch("https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/bookings/active")
             .then(res => res.json())
     ])
     .then(([rooms, bookings]) => {

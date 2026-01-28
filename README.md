@@ -8,7 +8,7 @@ cd services/user-service
 ./mvnw clean spring-boot:run
 
 # CHẠY AUTH-SERVICE
-cd /workspaces/distributed-hotel-booking/services/auth-service
+cd services/auth-service
 ./mvnw clean spring-boot:run
 
 # CHẠY BOOKING SERVICE
@@ -17,7 +17,7 @@ cd services/booking-service
 mvn spring-boot:run
 
 # CHẠY API-GATEWAY
-cd /workspaces/distributed-hotel-booking/services/api-gateway
+cd services/api-gateway
 ./mvnw clean spring-boot:run
 
 # room-service

@@ -277,9 +277,8 @@ function logout(){
 /* ===== LOAD BOOKINGS ===== */
 const token = localStorage.getItem("token");
 
-fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user?email=${email}`,{
-  headers:{ Authorization:"Bearer "+token }
-})
+fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/bookings/user?email=${email}`)
+
 .then(r=>r.json())
 .then(data=>{
   const active = data.filter(b=>b.status!=="CANCELLED");
@@ -295,11 +294,17 @@ fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/user
           <span class="status active">Đang hoạt động</span>
         </div>
         <div>
-          ${b.status==="PENDING_PAYMENT"
-            ? `<button class="btn btn-pay" onclick="pay(${b.id})">Thanh toán</button>
-               <button class="btn btn-cancel" onclick="cancel(${b.id})">Huỷ</button>`
-            : `<span>✅ Đã thanh toán</span>`
-          }
+          ${
+  b.status === "PENDING_PAYMENT"
+    ? `<button class="btn btn-pay" onclick="pay(${b.id})">Thanh toán</button>
+       <button class="btn btn-cancel" onclick="cancel(${b.id})">Huỷ</button>`
+  : b.status === "CONFIRMED"
+    ? `<span>✅ Đã thanh toán</span>`
+  : b.status === "CANCELLED"
+    ? `<span style="color:#d32f2f">❌ Đã huỷ</span>`
+  : ""
+}
+
         </div>
       </div>
     `).join("");
@@ -324,7 +329,10 @@ function pay(id){
 
 function cancel(id){
   if(!confirm("Huỷ booking?")) return;
-  fetch(`https://ominous-trout-v67rqxvv9j4v2w7rr-8082.app.github.dev/bookings/${id}/cancel`,{method:"PUT"})
+fetch(
+  `https://ominous-trout-v67rqxvv9j4v2w7rr-8088.app.github.dev/api/bookings/${id}/cancel`,
+  { method:"PUT" }
+)
     .then(()=>location.reload());
 }
 </script>

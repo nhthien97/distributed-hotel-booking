@@ -8,12 +8,12 @@ spring:
   cloud:
     gateway:
 
-      # ================== CORS (BẮT BUỘC CHO FRONTEND) ==================
       globalcors:
+        add-to-simple-url-handler-mapping: true
         corsConfigurations:
           '[/**]':
             allowedOrigins:
-              - "https://ominous-trout-v67rqxvv9j4v2w7rr-5500.app.github.dev"
+              - https://ominous-trout-v67rqxvv9j4v2w7rr-5500.app.github.dev
             allowedMethods:
               - GET
               - POST
@@ -24,7 +24,6 @@ spring:
               - "*"
             allowCredentials: true
 
-      # ================== ROUTES ==================
       routes:
         - id: auth-service
           uri: http://localhost:8080
@@ -46,3 +45,17 @@ spring:
             - Path=/api/bookings/**
           filters:
             - StripPrefix=1
+
+        - id: room-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/rooms/**
+          filters:
+            - StripPrefix=1
+
+        - id: payment-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/payments/**
+          filters:
+             - StripPrefix=1
