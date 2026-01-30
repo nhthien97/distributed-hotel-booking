@@ -61,7 +61,12 @@ th{color:#6b7280;font-weight:700}
     <div class="stat"><span>Phòng</span><h2 id="statRooms">0</h2></div>
     <div class="stat"><span>Booking</span><h2 id="statBookings">0</h2></div>
     <div class="stat"><span>Người dùng</span><h2 id="statUsers">0</h2></div>
-    <div class="stat"><span>Doanh thu</span><h2>—</h2></div>
+
+    <div class="stat">
+  <span>Doanh thu</span>
+  <h2 id="statRevenue">0 đ</h2>
+</div>
+
   </div>
 </section>
 
@@ -126,14 +131,17 @@ function show(id,el){
 }
 
 async function loadDashboard(){
-  const [rooms,bookings,users]=await Promise.all([
+  const [rooms, bookings, users, revenue] = await Promise.all([
     fetch(BASE+"/rooms").then(r=>r.json()),
     fetch(BASE+"/bookings").then(r=>r.json()),
-    fetch(BASE+"/users").then(r=>r.json())
+    fetch(BASE+"/users").then(r=>r.json()),
+    fetch(BASE+"/payments/revenue/total").then(r=>r.json())
   ]);
-  statRooms.innerText=rooms.length;
-  statBookings.innerText=bookings.length;
-  statUsers.innerText=users.length;
+
+  statRooms.innerText = rooms.length;
+  statBookings.innerText = bookings.length;
+  statUsers.innerText = users.length;
+  statRevenue.innerText = revenue.toLocaleString() + " đ";
 }
 
 function loadBookings(){

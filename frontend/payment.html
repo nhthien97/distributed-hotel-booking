@@ -281,7 +281,7 @@ body {
 
   <div class="info">
     <p><strong>Mã booking:</strong> <span id="bookingId"></span></p>
-    <p class="amount">300.000 VND</p>
+    <p class="amount" id="amount">Đang tính tiền...</p>
   </div>
 
  <div class="slide-pay" id="slidePay">
@@ -325,8 +325,7 @@ function pay() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      bookingId: Number(bookingId),
-      amount: 300000
+      bookingId: Number(bookingId)
     })
   })
   .then(async res => {
@@ -334,9 +333,13 @@ function pay() {
       const msg = await res.text();
       throw new Error(msg || "❌ Không thể thanh toán");
     }
-    return res.json();
+    return res.json(); // ✅ CHỈ parse JSON 1 LẦN
   })
   .then(data => {
+    // ✅ HIỂN THỊ SỐ TIỀN ĐÚNG TỪ BACKEND
+    document.getElementById("amount").innerText =
+      data.amount.toLocaleString("vi-VN") + " VND";
+
     document.getElementById("successBox").classList.add("show");
     localStorage.removeItem("lastBookingId");
 
@@ -346,11 +349,10 @@ function pay() {
   })
   .catch(err => {
     alert(err.message);
-    // reset slider để kéo lại
-    document.getElementById("slideHandle").style.left = "4px";
-    document.getElementById("slideFill").style.width = "0";
-    document.querySelector(".slide-text").style.opacity = "1";
-    document.getElementById("slideHandle").style.pointerEvents = "auto";
+    handle.style.left = "4px";
+    fill.style.width = "0";
+    text.style.opacity = "1";
+    handle.style.pointerEvents = "auto";
   });
 }
 
