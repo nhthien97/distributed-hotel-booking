@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// 🔥 ADD 2 IMPORT NÀY
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+
 @Service
 public class UserService {
 
@@ -23,29 +27,33 @@ public class UserService {
     // CREATE USER (REGISTER)
     public User createUser(UserCreateRequest request) {
 
-    // ✅ check email trùng
-    if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-        throw new RuntimeException("Email already exists");
+        // ✅ check email trùng
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Email already exists"
+            );
+        }
+
+        // ✅ check username trùng
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Username already exists"
+            );
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        User user = new User(
+                request.getUsername(),
+                request.getEmail(),
+                encodedPassword,
+                "CUSTOMER"
+        );
+
+        return userRepository.save(user);
     }
-
-    // ✅ check username trùng
-    if (userRepository.findAll().stream()
-            .anyMatch(u -> u.getUsername().equals(request.getUsername()))) {
-        throw new RuntimeException("Username already exists");
-    }
-
-    String encodedPassword = passwordEncoder.encode(request.getPassword());
-
-    User user = new User(
-            request.getUsername(),
-            request.getEmail(),
-            encodedPassword,
-            "CUSTOMER"
-    );
-
-    return userRepository.save(user);
-}
-
 
     // GET ALL USERS
     public List<User> getAllUsers() {
