@@ -46,12 +46,13 @@ async function register(){
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        username:regUsername.value,
-        email:regEmail.value,
-        password:regPassword.value
+        username: regUsername.value,
+        email: regEmail.value,
+        password: regPassword.value,
+        role: "CUSTOMER"
       })
     });
-    if(!res.ok) throw new Error("Email đã tồn tại");
+    if(!res.ok) throw new Error("Đăng ký thất bại");
     status.textContent="Đăng ký thành công – hãy đăng nhập";
     status.className="status success";
     showLogin();
@@ -60,3 +61,4 @@ async function register(){
     status.className="status error";
   }
 }
+
