@@ -73,3 +73,18 @@ source ~/.bashrc
 java -version
 mvn -version
 
+jdbc:h2:mem:bookingdb
+SHOW TABLES;
+SELECT * FROM BOOKING;
+SELECT * FROM BOOKING ORDER BY ID DESC;
+SELECT COUNT(*) FROM BOOKING;
+
+jdbc:h2:mem:roomdb
+SHOW TABLES;
+
+jdbc:h2:mem:paymentdb
+SHOW TABLES;
+SELECT * FROM PAYMENT;
+SELECT * FROM PAYMENT WHERE BOOKING_ID = 1;
+SELECT COUNT(*) FROM PAYMENT;
+SELECT COUNT(*) FROM PAYMENT;

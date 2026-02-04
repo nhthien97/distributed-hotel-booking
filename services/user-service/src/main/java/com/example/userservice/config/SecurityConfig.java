@@ -13,10 +13,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // ❌ TẮT CSRF
             .csrf(csrf -> csrf.disable())
+
+            // ✅ CHO PHÉP H2 CONSOLE + API
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll() // 🔥 MỞ TOÀN BỘ API (DEV)
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/**").permitAll()
             )
+
+            // ✅ BẮT BUỘC để H2 Console render được
             .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
